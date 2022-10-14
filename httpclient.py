@@ -23,7 +23,7 @@ import socket
 import re
 # you may use urllib to encode data appropriately
 import urllib.parse
-
+HTTP_PORT = 80
 def help():
     print("httpclient.py [GET/POST] [URL]\n")
 
@@ -77,14 +77,14 @@ class HTTPClient(object):
         code = 500
         body = ""
         #print('this is a fancy url from the fancy fancy fancy fancy url parse, oooooooooooooooooooooooooooooooooo')
-        defaultP = 80
+        defaultP = HTTP_PORT
         if url[-1]!='/':
             url += '/'
         host = urllib.parse.urlparse(url).hostname
         #print('ccccccccccccccccccccccccc',urllib.parse.urlparse(url))
         path = urllib.parse.urlparse(url)[2]
         
-        if urllib.parse.urlparse(url).port != None:
+        if urllib.parse.urlparse(url).port:
             defaultP = urllib.parse.urlparse(url).port
         
         self.connect(host, defaultP)
@@ -102,12 +102,13 @@ class HTTPClient(object):
         if url[-1]!='/':
             url += '/'
         keyval = ''
-        defaultP = 80
+        defaultP = HTTP_PORT
         host = urllib.parse.urlparse(url).hostname
         path = urllib.parse.urlparse(url)[2]
-        if args != None:
+
+        if args:
             keyval = urllib.parse.urlencode(args)
-        if urllib.parse.urlparse(url).port != None:
+        if urllib.parse.urlparse(url).port:
             defaultP = urllib.parse.urlparse(url).port
         
         #print('ddddddddddddddddddddddd',args)
