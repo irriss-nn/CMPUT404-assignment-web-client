@@ -61,6 +61,12 @@ class HTTPClient(object):
     def close(self):
         self.socket.close()
 
+    def parse(self,url):
+        host = urllib.parse.urlparse(url).hostname
+        path = urllib.parse.urlparse(url)[2]
+        port = urllib.parse.urlparse(url).port
+        return host,path,port
+
     # read everything from the socket
     def recvall(self, sock):
         buffer = bytearray()
@@ -72,7 +78,7 @@ class HTTPClient(object):
             else:
                 done = not part
         return buffer.decode('utf-8')
-
+    
     def GET(self, url, args=None):
         code = 500
         body = ""
@@ -80,10 +86,7 @@ class HTTPClient(object):
         defaultP = HTTP_PORT
         if url[-1]!='/':
             url += '/'
-        host = urllib.parse.urlparse(url).hostname
-        #print('ccccccccccccccccccccccccc',urllib.parse.urlparse(url))
-        path = urllib.parse.urlparse(url)[2]
-        port = urllib.parse.urlparse(url).port
+        host,path,port = self.parse(url)
         if port:
             defaultP = port
         
@@ -103,9 +106,7 @@ class HTTPClient(object):
             url += '/'
         keyval = ''
         defaultP = HTTP_PORT
-        host = urllib.parse.urlparse(url).hostname
-        path = urllib.parse.urlparse(url)[2]
-        port = urllib.parse.urlparse(url).port
+        host,path,port = self.parse(url)
         if args:
             keyval = urllib.parse.urlencode(args)
         if port:
