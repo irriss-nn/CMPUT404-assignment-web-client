@@ -51,7 +51,7 @@ class HTTPClient(object):
         
 
     def get_body(self, data):
-        body = data.split("\r\n\r\n")[1]
+        body = data.split("\r\n\r\n")[-1]
         return body
         
     
@@ -78,14 +78,15 @@ class HTTPClient(object):
         body = ""
         #print('this is a fancy url from the fancy fancy fancy fancy url parse, oooooooooooooooooooooooooooooooooo')
         defaultP = 80
+        if url[-1]!='/':
+            url += '/'
         host = urllib.parse.urlparse(url).hostname
         #print('ccccccccccccccccccccccccc',urllib.parse.urlparse(url))
         path = urllib.parse.urlparse(url)[2]
+        
         if urllib.parse.urlparse(url).port != None:
             defaultP = urllib.parse.urlparse(url).port
-        if len(path) == 0 :
-            #print('this is the fancyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy url path',urlPath)
-            path = "/"
+        
         self.connect(host, defaultP)
         self.sendall(("GET {} HTTP/1.1\r\n"+"Host: {}\r\n"+"Port: {}\r\n"+"Connection: close\r\n\r\n").format(path,host,defaultP))
         r = self.recvall(self.socket)
@@ -98,6 +99,8 @@ class HTTPClient(object):
     def POST(self, url, args=None):
         code = 500
         body = ""
+        if url[-1]!='/':
+            url += '/'
         keyval = ''
         defaultP = 80
         host = urllib.parse.urlparse(url).hostname
@@ -106,8 +109,7 @@ class HTTPClient(object):
             keyval = urllib.parse.urlencode(args)
         if urllib.parse.urlparse(url).port != None:
             defaultP = urllib.parse.urlparse(url).port
-        if len(path) ==0:
-            path = '/'
+        
         #print('ddddddddddddddddddddddd',args)
        
         
