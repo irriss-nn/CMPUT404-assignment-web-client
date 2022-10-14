@@ -83,9 +83,9 @@ class HTTPClient(object):
         host = urllib.parse.urlparse(url).hostname
         #print('ccccccccccccccccccccccccc',urllib.parse.urlparse(url))
         path = urllib.parse.urlparse(url)[2]
-        
-        if urllib.parse.urlparse(url).port:
-            defaultP = urllib.parse.urlparse(url).port
+        port = urllib.parse.urlparse(url).port
+        if port:
+            defaultP = port
         
         self.connect(host, defaultP)
         self.sendall(("GET {} HTTP/1.1\r\n"+"Host: {}\r\n"+"Port: {}\r\n"+"Connection: close\r\n\r\n").format(path,host,defaultP))
@@ -105,11 +105,11 @@ class HTTPClient(object):
         defaultP = HTTP_PORT
         host = urllib.parse.urlparse(url).hostname
         path = urllib.parse.urlparse(url)[2]
-
+        port = urllib.parse.urlparse(url).port
         if args:
             keyval = urllib.parse.urlencode(args)
-        if urllib.parse.urlparse(url).port:
-            defaultP = urllib.parse.urlparse(url).port
+        if port:
+            defaultP = port
         
         #print('ddddddddddddddddddddddd',args)
        
